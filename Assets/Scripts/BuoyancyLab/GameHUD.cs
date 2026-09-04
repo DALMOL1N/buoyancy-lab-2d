@@ -49,7 +49,7 @@ public sealed class GameHUD : MonoBehaviour
         GUI.Box(new Rect(18, 18, 440, 100), GUIContent.none);
         GUI.color = Color.white;
         GUI.Label(new Rect(34, 25, 410, 36), "LABORATÓRIO DE EMPUXO", titleStyle);
-        GUI.Label(new Rect(34, 62, 410, 50), "A/D ou setas: mover  •  Espaço: pular/nadar  •  E: pegar  •  R: reiniciar", bodyStyle);
+        GUI.Label(new Rect(34, 62, 410, 50), "A/D: mover  •  W/S: nadar  •  Espaço: pular/subir  •  E: pegar  •  R: reiniciar", bodyStyle);
 
         Camera cam = Camera.main;
         if (cam == null) return;

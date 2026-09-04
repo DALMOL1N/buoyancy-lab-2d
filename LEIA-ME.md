@@ -7,7 +7,7 @@ Versão melhorada do projeto Unity com uma experiência jogável sobre densidade
 1. Abra o projeto pelo Unity Hub.
 2. Abra `Assets/Scenes/SampleScene.unity`.
 3. Pressione **Play**.
-4. Use **A/D** ou as **setas** para andar, **Espaço** para pular e nadar, **E** para pegar e **R** para reiniciar.
+4. Use **A/D** ou as **setas laterais** para andar, **W/seta para cima/Espaço** para subir na água, **S/seta para baixo** para mergulhar, **E** para pegar e **R** para reiniciar.
 
 Empurre os três objetos para o lago:
 

@@ -133,7 +133,11 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         CapsuleCollider2D col = player.AddComponent<CapsuleCollider2D>();
         col.size = new Vector2(0.72f, 1.65f);
         col.offset = new Vector2(0f, -0.03f);
-        player.AddComponent<BuoyantBody>().density = 0.78f;
+        BuoyantBody playerBuoyancy = player.AddComponent<BuoyantBody>();
+        // Densidade neutra: o jogador decide se sobe ou mergulha.
+        playerBuoyancy.density = 1f;
+        playerBuoyancy.waterDrag = 1.4f;
+        playerBuoyancy.waterAngularDrag = 2f;
         player.AddComponent<ExplorerController>().Configure(frames);
     }
 
