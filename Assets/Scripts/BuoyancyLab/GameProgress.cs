@@ -3,8 +3,10 @@ using UnityEngine;
 public sealed class GameProgress : MonoBehaviour
 {
     int collected;
-    int total;
-    GameHUD hud;
+    [SerializeField] int total = 3;
+    [SerializeField] GameHUD hud;
+
+    void Start() => hud.SetProgress(collected, total);
 
     public void Configure(GameHUD gameHud, int itemCount)
     {

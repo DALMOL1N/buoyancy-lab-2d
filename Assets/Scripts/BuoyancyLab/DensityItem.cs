@@ -4,7 +4,10 @@ using UnityEngine;
 [RequireComponent(typeof(BuoyantBody), typeof(Rigidbody2D), typeof(Collider2D))]
 public sealed class DensityItem : MonoBehaviour
 {
-    public string DisplayName { get; private set; }
+    [SerializeField] string displayName;
+    [SerializeField] GameProgress progress;
+
+    public string DisplayName => displayName;
     public bool HasEnteredWater { get; private set; }
     public bool IsCollected { get; private set; }
     public bool CanCollect => HasEnteredWater && !IsCollected;
@@ -12,11 +15,10 @@ public sealed class DensityItem : MonoBehaviour
     BuoyantBody buoyancy;
     Rigidbody2D body;
     Collider2D bodyCollider;
-    GameProgress progress;
 
     public void Configure(string displayName, GameProgress gameProgress)
     {
-        DisplayName = displayName;
+        this.displayName = displayName;
         progress = gameProgress;
     }
 

@@ -5,6 +5,7 @@ public sealed class GameHUD : MonoBehaviour
 {
     public static GameHUD Instance { get; private set; }
 
+    [System.Serializable]
     public struct ItemInfo
     {
         public Transform target;
@@ -13,7 +14,7 @@ public sealed class GameHUD : MonoBehaviour
         public Color color;
     }
 
-    readonly List<ItemInfo> items = new List<ItemInfo>();
+    [SerializeField] List<ItemInfo> items = new List<ItemInfo>();
     GUIStyle titleStyle;
     GUIStyle bodyStyle;
     GUIStyle itemStyle;

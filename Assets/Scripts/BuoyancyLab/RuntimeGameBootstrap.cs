@@ -20,7 +20,7 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         new GameObject("Buoyancy Lab - Runtime").AddComponent<RuntimeGameBootstrap>().Build();
     }
 
-    void Build()
+    public void Build()
     {
         Physics2D.gravity = new Vector2(0f, -12f);
         whiteSprite = MakeWhiteSprite();

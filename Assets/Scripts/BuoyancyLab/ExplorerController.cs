@@ -13,7 +13,7 @@ public sealed class ExplorerController : MonoBehaviour
     Rigidbody2D body;
     Collider2D bodyCollider;
     SpriteRenderer spriteRenderer;
-    Sprite[] frames;
+    [SerializeField] Sprite[] frames;
     Vector3 spawnPoint;
     float animationClock;
     DensityItem nearbyItem;
