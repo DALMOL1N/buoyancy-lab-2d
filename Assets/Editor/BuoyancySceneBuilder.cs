@@ -10,7 +10,7 @@ public static class BuoyancySceneBuilder
 {
     const string ScenePath = "Assets/Scenes/BuoyancyLab.unity";
     const string GeneratedFolder = "Assets/Resources/GeneratedSprites";
-    const string SessionReadyKey = "BuoyancyLab.EditableSceneReady";
+    const string SessionReadyKey = "BuoyancyLab.EditableSceneReady.v3";
 
     static BuoyancySceneBuilder()
     {
