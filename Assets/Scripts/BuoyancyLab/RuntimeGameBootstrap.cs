@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[ExecuteAlways]
 public sealed class RuntimeGameBootstrap : MonoBehaviour
 {
     public const int GroundLayer = 8;
@@ -11,8 +12,13 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void StartGame()
     {
-        if (Object.FindFirstObjectByType<RuntimeGameBootstrap>() != null)
+        RuntimeGameBootstrap existing = Object.FindAnyObjectByType<RuntimeGameBootstrap>();
+        if (existing != null)
+        {
+            if (Object.FindAnyObjectByType<ExplorerController>() == null)
+                existing.Build();
             return;
+        }
 
         foreach (GameObject root in SceneManager.GetActiveScene().GetRootGameObjects())
             root.SetActive(false);
@@ -20,8 +26,27 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         new GameObject("Buoyancy Lab - Runtime").AddComponent<RuntimeGameBootstrap>().Build();
     }
 
+#if UNITY_EDITOR
+    void OnEnable()
+    {
+        if (!Application.isPlaying)
+            UnityEditor.EditorApplication.delayCall += BuildEditorPreview;
+    }
+
+    void BuildEditorPreview()
+    {
+        if (this == null || Application.isPlaying)
+            return;
+
+        Build();
+    }
+#endif
+
     public void Build()
     {
+        if (GameObject.Find("Mystic Lake Backdrop") != null)
+            return;
+
         Physics2D.gravity = new Vector2(0f, -12f);
         whiteSprite = MakeWhiteSprite();
 

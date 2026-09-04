@@ -71,8 +71,8 @@ public static class BuoyancySceneBuilder
     static void PersistGeneratedSprites()
     {
         Sprite square = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Square.png");
-        SpriteRenderer[] renderers = Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None);
-        var persisted = new Dictionary<int, Sprite>();
+        SpriteRenderer[] renderers = Object.FindObjectsByType<SpriteRenderer>();
+        var persisted = new Dictionary<Sprite, Sprite>();
         int index = 0;
 
         foreach (SpriteRenderer renderer in renderers)
@@ -87,8 +87,7 @@ public static class BuoyancySceneBuilder
             }
 
             if (EditorUtility.IsPersistent(current)) continue;
-            int id = current.GetInstanceID();
-            if (!persisted.TryGetValue(id, out Sprite saved))
+            if (!persisted.TryGetValue(current, out Sprite saved))
             {
                 string safeName = Sanitize(current.texture.name + "_" + index++);
                 string assetPath = GeneratedFolder + "/" + safeName + ".asset";
@@ -96,13 +95,13 @@ public static class BuoyancySceneBuilder
                 saved = Object.Instantiate(current);
                 saved.name = safeName;
                 AssetDatabase.CreateAsset(saved, assetPath);
-                persisted[id] = saved;
+                persisted[current] = saved;
             }
             renderer.sprite = saved;
         }
 
         // Os frames que não estão ativos no SpriteRenderer também precisam ser persistidos.
-        ExplorerController explorer = Object.FindFirstObjectByType<ExplorerController>();
+        ExplorerController explorer = Object.FindAnyObjectByType<ExplorerController>();
         if (explorer != null)
         {
             SerializedObject serialized = new SerializedObject(explorer);
