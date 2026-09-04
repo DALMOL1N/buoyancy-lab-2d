@@ -113,39 +113,37 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         // Os colliders acompanham as margens pintadas no cenário, mas ficam
         // invisíveis para não cobrir a arte natural com retângulos escuros.
         Color invisible = new Color(0f, 0f, 0f, 0f);
-        CreateSolid("Margem esquerda (colisor invisível)", new Vector2(-8f, -1.55f), new Vector2(10f, 3f), invisible, 0f);
-        CreateSolid("Fundo do lago (colisor invisível)", new Vector2(3.1f, -5.45f), new Vector2(10.2f, 1f), invisible, 0f);
-        CreateSolid("Margem direita (colisor invisível)", new Vector2(11f, -1.75f), new Vector2(5.6f, 3.2f), invisible, 0f);
-
-        // Apoio físico sobre as pedras que já existem na imagem de fundo.
-        CreateSolid("Pedra natural submersa (colisor invisível)", new Vector2(6.8f, -4.05f), new Vector2(3.2f, 0.48f), invisible, -7f);
+        CreateSolid("Margem esquerda (colisor invisível)", new Vector2(-10.7f, -4.7f), new Vector2(5.4f, 4.5f), invisible, 0f);
+        CreateSolid("Fundo do lago (colisor invisível)", new Vector2(-0.2f, -6.65f), new Vector2(15.6f, 0.7f), invisible, 0f);
+        CreateSolid("Margem direita (colisor invisível)", new Vector2(10.5f, -4.75f), new Vector2(5.8f, 4.3f), invisible, 0f);
 
         // Uma rampa invisível mantém a saída da água confortável sem mostrar degraus.
-        CreateSolid("Saída submersa invisível", new Vector2(-2.05f, -0.92f), new Vector2(2.35f, 0.24f), invisible, -38f);
+        CreateSolid("Saída submersa invisível", new Vector2(-7.25f, -3.35f), new Vector2(2.15f, 0.22f), invisible, -34f);
     }
 
     void CreateWater()
     {
-        const float surfaceY = -0.15f;
-        Vector2 size = new Vector2(13.5f, 5.2f);
-        Vector2 center = new Vector2(4.75f, surfaceY - size.y * 0.5f);
+        // Limites medidos diretamente na arte MysticLake (16:9): a linha
+        // luminosa pintada no fundo fica em Y -2,9, entre X -8 e X 7,6.
+        const float surfaceY = -2.9f;
+        Vector2 size = new Vector2(15.6f, 3.4f);
+        Vector2 center = new Vector2(-0.2f, surfaceY - size.y * 0.5f);
         GameObject water = new GameObject("Água");
         water.transform.position = center;
         SpriteRenderer sr = water.AddComponent<SpriteRenderer>();
         sr.sprite = whiteSprite;
-        sr.color = new Color(0.02f, 0.58f, 0.78f, 0.09f);
+        sr.color = new Color(0.02f, 0.58f, 0.78f, 0.045f);
         sr.sortingOrder = -2;
         water.transform.localScale = size;
         water.AddComponent<WaterZone>().Configure(center, size, surfaceY);
 
-        CreateDecor("Linha luminosa da água", new Vector2(center.x, surfaceY), new Vector2(size.x, 0.035f), new Color(0.15f, 0.96f, 1f, 0.32f), 4);
-        CreateDecor("Brilho da superfície", new Vector2(center.x, surfaceY - 0.08f), new Vector2(size.x, 0.12f), new Color(0.08f, 0.76f, 1f, 0.07f), 3);
+        // A própria imagem já possui linha e brilho na superfície.
     }
 
     void CreatePlayer(Sprite[] frames)
     {
         GameObject player = new GameObject("Exploradora");
-        player.transform.position = new Vector2(-10.4f, 0.85f);
+        player.transform.position = new Vector2(-10.4f, -1.6f);
         SpriteRenderer sr = player.AddComponent<SpriteRenderer>();
         sr.sprite = frames[0];
         sr.sortingOrder = 12;

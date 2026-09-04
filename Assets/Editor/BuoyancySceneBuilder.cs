@@ -10,7 +10,7 @@ public static class BuoyancySceneBuilder
 {
     const string ScenePath = "Assets/Scenes/BuoyancyLab.unity";
     const string GeneratedFolder = "Assets/Resources/GeneratedSprites";
-    const string SessionReadyKey = "BuoyancyLab.EditableSceneReady.v3";
+    const string SessionReadyKey = "BuoyancyLab.EditableSceneReady.v5";
 
     static BuoyancySceneBuilder()
     {
@@ -72,6 +72,10 @@ public static class BuoyancySceneBuilder
         bool usesOldWorldLayout = GameObject.Find("Margem esquerda") != null ||
                                   GameObject.Find("Degrau da margem 1") != null ||
                                   GameObject.Find("Saída submersa invisível") == null;
+        WaterZone water = Object.FindAnyObjectByType<WaterZone>();
+        usesOldWorldLayout |= water == null ||
+                              water.Bounds.min.x > -7.8f ||
+                              Mathf.Abs(water.SurfaceY + 2.9f) > 0.1f;
 
         if (Object.FindAnyObjectByType<ExplorerController>() == null || usesOldItemLayout || usesOldWorldLayout)
             BuildAndSaveScene();
