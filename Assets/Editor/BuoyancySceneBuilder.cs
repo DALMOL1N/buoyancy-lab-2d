@@ -10,6 +10,7 @@ public static class BuoyancySceneBuilder
 {
     const string ScenePath = "Assets/Scenes/BuoyancyLab.unity";
     const string GeneratedFolder = "Assets/Resources/GeneratedSprites";
+    const string SessionReadyKey = "BuoyancyLab.EditableSceneReady";
 
     static BuoyancySceneBuilder()
     {
@@ -42,7 +43,33 @@ public static class BuoyancySceneBuilder
 
         SceneAsset existing = AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath);
         if (existing == null)
+        {
             BuildAndSaveScene();
+            SessionState.SetBool(SessionReadyKey, true);
+            return;
+        }
+
+        if (SessionState.GetBool(SessionReadyKey, false))
+            return;
+
+        Scene active = SceneManager.GetActiveScene();
+        if (active.path != ScenePath)
+        {
+            // Não descarta alterações do usuário em outra cena.
+            if (active.isDirty)
+                return;
+
+            active = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        }
+
+        // Uma cena antiga continha apenas o bootstrap. Reconstrói e salva todos
+        // os objetos para que apareçam na Scene/Hierarchy sem apertar Play.
+        if (Object.FindAnyObjectByType<ExplorerController>() == null)
+            BuildAndSaveScene();
+        else if (active.isDirty)
+            EditorSceneManager.SaveScene(active, ScenePath);
+
+        SessionState.SetBool(SessionReadyKey, true);
     }
 
     static void BuildAndSaveScene()

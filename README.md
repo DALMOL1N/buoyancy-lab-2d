@@ -5,8 +5,8 @@ Projeto Unity 6 com um laboratório de empuxo jogável.
 ## Abrir na Unity
 
 1. No Unity Hub, escolha **Add project from disk** e selecione a pasta deste projeto.
-2. Na janela Project, abra `Assets/Scenes/BuoyancyLab.unity`.
-3. Aguarde a Unity terminar de importar. A câmera, a água, as plataformas, o jogador e os três itens aparecerão na Scene e na Hierarchy antes de apertar Play.
+2. Aguarde a Unity terminar de importar. A cena `Assets/Scenes/BuoyancyLab.unity` será aberta e salva automaticamente.
+3. A câmera, a água, as plataformas, o jogador e os três itens aparecerão na Scene e na Hierarchy antes de apertar Play.
 4. Pressione Play para testar.
 
 ## Controles
