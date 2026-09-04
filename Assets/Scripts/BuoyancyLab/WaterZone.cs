@@ -15,7 +15,9 @@ public sealed class WaterZone : MonoBehaviour
 
         var trigger = gameObject.AddComponent<BoxCollider2D>();
         trigger.isTrigger = true;
-        trigger.size = size;
+        // O objeto visual já está escalado para o tamanho da água.
+        // Um collider unitário evita multiplicar o tamanho duas vezes.
+        trigger.size = Vector2.one;
     }
 
     public float GetSubmersion(Collider2D bodyCollider)

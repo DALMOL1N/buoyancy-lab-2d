@@ -7,13 +7,15 @@ Versão melhorada do projeto Unity com uma experiência jogável sobre densidade
 1. Abra o projeto pelo Unity Hub.
 2. Abra `Assets/Scenes/SampleScene.unity`.
 3. Pressione **Play**.
-4. Use **A/D** ou as **setas** para andar, **Espaço** para pular e nadar e **R** para reiniciar.
+4. Use **A/D** ou as **setas** para andar, **Espaço** para pular e nadar, **E** para pegar e **R** para reiniciar.
 
 Empurre os três objetos para o lago:
 
 - **Baú — densidade 2,35:** afunda.
 - **Barril — densidade 0,92:** permanece quase em equilíbrio e flutua baixo.
 - **Garrafa — densidade 0,22:** sobe rapidamente e boia na superfície.
+
+Depois que cada objeto entrar na água, nade até ele e pressione **E** para recuperá-lo. A fase termina quando os três forem recolhidos. Há uma escadaria submersa no lado esquerdo para voltar à margem.
 
 ## Conteúdo novo
 

@@ -15,6 +15,7 @@ public sealed class ExplorerController : MonoBehaviour
     Sprite[] frames;
     Vector3 spawnPoint;
     float animationClock;
+    DensityItem nearbyItem;
 
     public void Configure(Sprite[] animationFrames)
     {
@@ -43,6 +44,7 @@ public sealed class ExplorerController : MonoBehaviour
         if (transform.position.y < -7f)
             Respawn();
 
+        UpdateInteraction();
         Animate();
     }
 
@@ -57,12 +59,44 @@ public sealed class ExplorerController : MonoBehaviour
         if (Mathf.Abs(input) > 0.01f)
             spriteRenderer.flipX = input < 0f;
 
-        bool inWater = WaterZone.Instance != null && WaterZone.Instance.GetSubmersion(bodyCollider) > 0.45f;
+        // Permite continuar nadando quando só os pés/corpo inferior estão na água,
+        // condição comum ao tentar subir de volta para a margem.
+        bool inWater = WaterZone.Instance != null && WaterZone.Instance.GetSubmersion(bodyCollider) > 0.08f;
         bool grounded = Physics2D.Raycast(transform.position, Vector2.down, 1.05f, RuntimeGameBootstrap.GroundMask);
-        if (Input.GetKey(KeyCode.Space) && inWater && body.linearVelocity.y < 3.5f)
-            body.AddForce(Vector2.up * swimImpulse, ForceMode2D.Force);
+        if (Input.GetKey(KeyCode.Space) && inWater && body.linearVelocity.y < 4.8f)
+            body.AddForce(Vector2.up * swimImpulse * 1.65f, ForceMode2D.Force);
         else if (Input.GetKeyDown(KeyCode.Space) && grounded)
             body.AddForce(Vector2.up * jumpImpulse, ForceMode2D.Impulse);
+    }
+
+    void UpdateInteraction()
+    {
+        nearbyItem = null;
+        float nearestDistance = float.MaxValue;
+        foreach (Collider2D hit in Physics2D.OverlapCircleAll(transform.position, 1.75f))
+        {
+            DensityItem item = hit.GetComponent<DensityItem>();
+            if (item == null || item.IsCollected) continue;
+            float distance = (item.transform.position - transform.position).sqrMagnitude;
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearbyItem = item;
+            }
+        }
+
+        if (GameHUD.Instance != null)
+        {
+            if (nearbyItem == null)
+                GameHUD.Instance.SetInteraction(string.Empty);
+            else if (nearbyItem.CanCollect)
+                GameHUD.Instance.SetInteraction($"PRESSIONE E PARA PEGAR: {nearbyItem.DisplayName.ToUpperInvariant()}");
+            else
+                GameHUD.Instance.SetInteraction("PRIMEIRO EMPURRE ESTE OBJETO PARA A ÁGUA");
+        }
+
+        if (nearbyItem != null && nearbyItem.CanCollect && Input.GetKeyDown(KeyCode.E))
+            nearbyItem.Collect(transform);
     }
 
     void Animate()

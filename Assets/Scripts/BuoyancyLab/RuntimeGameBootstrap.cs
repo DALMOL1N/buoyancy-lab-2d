@@ -40,12 +40,14 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         Sprite[] propSprites = SliceHorizontal(propAtlas, 3, 250f);
 
         GameHUD hud = gameObject.AddComponent<GameHUD>();
+        GameProgress progress = gameObject.AddComponent<GameProgress>();
+        progress.Configure(hud, 3);
         CreatePlayer(explorerFrames);
-        CreateProp("Baú Pesado", new Vector2(-3.1f, 1.15f), new Vector2(1.45f, 1.25f), propSprites[0], 5.2f, 2.35f, 0.85f, hud,
+        CreateProp("Baú Pesado", new Vector2(-3.1f, 1.15f), new Vector2(1.45f, 1.25f), propSprites[0], 5.2f, 2.35f, 0.85f, hud, progress,
             "BAÚ", "densidade 2,35 • afunda", new Color(0.82f, 0.43f, 0.12f));
-        CreateProp("Barril Equilibrado", new Vector2(-4.8f, 1.1f), new Vector2(1.15f, 1.35f), propSprites[1], 2.2f, 0.92f, 0.72f, hud,
+        CreateProp("Barril Equilibrado", new Vector2(-4.8f, 1.1f), new Vector2(1.15f, 1.35f), propSprites[1], 2.2f, 0.92f, 0.72f, hud, progress,
             "BARRIL", "densidade 0,92 • quase neutro", new Color(0.2f, 0.68f, 0.74f));
-        CreateProp("Garrafa Leve", new Vector2(-7.0f, 0.9f), new Vector2(0.65f, 1.05f), propSprites[2], 0.45f, 0.22f, 0.42f, hud,
+        CreateProp("Garrafa Leve", new Vector2(-7.0f, 0.9f), new Vector2(0.65f, 1.05f), propSprites[2], 0.45f, 0.22f, 0.42f, hud, progress,
             "GARRAFA", "densidade 0,22 • boia", new Color(0.22f, 0.88f, 1f));
 
         CreateFireflies();
@@ -85,6 +87,12 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         CreateSolid("Fundo do lago", new Vector2(3f, -5.45f), new Vector2(12f, 1f), new Color(0.025f, 0.055f, 0.11f), 0);
         CreateSolid("Margem direita", new Vector2(11.5f, -1.7f), new Vector2(5f, 3.4f), new Color(0.035f, 0.09f, 0.15f), 0);
         CreateSolid("Pedra submersa", new Vector2(7.8f, -3.65f), new Vector2(2.6f, 0.55f), new Color(0.05f, 0.14f, 0.2f), -8f);
+
+        // Escadaria submersa que permite sair do lago pelo lado esquerdo.
+        CreateSolid("Degrau da margem 1", new Vector2(-2.65f, -0.32f), new Vector2(0.9f, 0.48f), new Color(0.04f, 0.16f, 0.21f), 0f);
+        CreateSolid("Degrau da margem 2", new Vector2(-2.05f, -0.82f), new Vector2(0.9f, 0.48f), new Color(0.04f, 0.15f, 0.21f), 0f);
+        CreateSolid("Degrau da margem 3", new Vector2(-1.45f, -1.32f), new Vector2(0.9f, 0.48f), new Color(0.035f, 0.14f, 0.2f), 0f);
+        CreateSolid("Degrau da margem 4", new Vector2(-0.85f, -1.82f), new Vector2(0.9f, 0.48f), new Color(0.03f, 0.13f, 0.19f), 0f);
 
         for (int i = 0; i < 15; i++)
         {
@@ -129,7 +137,7 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         player.AddComponent<ExplorerController>().Configure(frames);
     }
 
-    void CreateProp(string objectName, Vector2 position, Vector2 colliderSize, Sprite sprite, float mass, float density, float scale, GameHUD hud, string title, string subtitle, Color labelColor)
+    void CreateProp(string objectName, Vector2 position, Vector2 colliderSize, Sprite sprite, float mass, float density, float scale, GameHUD hud, GameProgress progress, string title, string subtitle, Color labelColor)
     {
         GameObject prop = new GameObject(objectName);
         prop.transform.position = position;
@@ -149,6 +157,7 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         buoyancy.density = density;
         buoyancy.waterDrag = density < 0.5f ? 5f : 2.4f;
         buoyancy.waterAngularDrag = density < 0.5f ? 4f : 1.4f;
+        prop.AddComponent<DensityItem>().Configure(title, progress);
         hud.AddItem(prop.transform, title, subtitle, labelColor);
     }
 

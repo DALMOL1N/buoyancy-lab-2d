@@ -3,6 +3,8 @@ using UnityEngine;
 
 public sealed class GameHUD : MonoBehaviour
 {
+    public static GameHUD Instance { get; private set; }
+
     public struct ItemInfo
     {
         public Transform target;
@@ -15,6 +17,13 @@ public sealed class GameHUD : MonoBehaviour
     GUIStyle titleStyle;
     GUIStyle bodyStyle;
     GUIStyle itemStyle;
+    GUIStyle centerStyle;
+    string interactionText = string.Empty;
+    int collected;
+    int total = 3;
+    bool phaseComplete;
+
+    void Awake() => Instance = this;
 
     public void AddItem(Transform target, string title, string subtitle, Color color)
     {
@@ -30,6 +39,7 @@ public sealed class GameHUD : MonoBehaviour
         bodyStyle.normal.textColor = Color.white;
         itemStyle = new GUIStyle(GUI.skin.box) { fontSize = 14, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter, richText = true };
         itemStyle.normal.textColor = Color.white;
+        centerStyle = new GUIStyle(titleStyle) { alignment = TextAnchor.MiddleCenter, wordWrap = true };
     }
 
     void OnGUI()
@@ -39,7 +49,7 @@ public sealed class GameHUD : MonoBehaviour
         GUI.Box(new Rect(18, 18, 440, 100), GUIContent.none);
         GUI.color = Color.white;
         GUI.Label(new Rect(34, 25, 410, 36), "LABORATÓRIO DE EMPUXO", titleStyle);
-        GUI.Label(new Rect(34, 62, 410, 50), "A/D ou setas: mover  •  Espaço: pular/nadar  •  R: reiniciar", bodyStyle);
+        GUI.Label(new Rect(34, 62, 410, 50), "A/D ou setas: mover  •  Espaço: pular/nadar  •  E: pegar  •  R: reiniciar", bodyStyle);
 
         Camera cam = Camera.main;
         if (cam == null) return;
@@ -56,6 +66,34 @@ public sealed class GameHUD : MonoBehaviour
         GUI.color = new Color(0.04f, 0.12f, 0.22f, 0.9f);
         GUI.Box(new Rect(Screen.width - 308, 18, 290, 78), GUIContent.none);
         GUI.color = Color.white;
-        GUI.Label(new Rect(Screen.width - 294, 28, 268, 56), "Empurre os três objetos na água.\nObserve quem afunda, equilibra e boia.", bodyStyle);
+        GUI.Label(new Rect(Screen.width - 294, 28, 268, 56), $"Objetos recuperados: <b>{collected}/{total}</b>\nJogue na água, nade até eles e pressione E.", bodyStyle);
+
+        if (!string.IsNullOrEmpty(interactionText))
+        {
+            GUI.color = new Color(0.02f, 0.08f, 0.16f, 0.94f);
+            GUI.Box(new Rect(Screen.width * 0.5f - 265f, Screen.height - 92f, 530f, 58f), GUIContent.none);
+            GUI.color = new Color(0.55f, 0.96f, 1f);
+            GUI.Label(new Rect(Screen.width * 0.5f - 250f, Screen.height - 82f, 500f, 40f), interactionText, centerStyle);
+        }
+
+        if (phaseComplete)
+        {
+            GUI.color = new Color(0.01f, 0.04f, 0.11f, 0.96f);
+            GUI.Box(new Rect(Screen.width * 0.5f - 310f, Screen.height * 0.5f - 105f, 620f, 210f), GUIContent.none);
+            GUI.color = new Color(1f, 0.74f, 0.16f);
+            GUI.Label(new Rect(Screen.width * 0.5f - 280f, Screen.height * 0.5f - 70f, 560f, 70f), "FASE CONCLUÍDA!", centerStyle);
+            GUI.color = Color.white;
+            GUI.Label(new Rect(Screen.width * 0.5f - 250f, Screen.height * 0.5f + 10f, 500f, 60f), "Você testou as três densidades e recuperou todos os objetos.\nPressione R para jogar novamente.", centerStyle);
+        }
     }
+
+    public void SetInteraction(string message) => interactionText = message;
+
+    public void SetProgress(int value, int maximum)
+    {
+        collected = value;
+        total = maximum;
+    }
+
+    public void SetPhaseComplete() => phaseComplete = true;
 }
