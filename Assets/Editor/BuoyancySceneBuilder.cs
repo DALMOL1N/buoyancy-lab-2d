@@ -69,8 +69,11 @@ public static class BuoyancySceneBuilder
         bool usesOldItemLayout = barrel == null || bottle == null ||
                                  barrel.transform.position.y < 4f ||
                                  bottle.transform.position.y < 4f;
+        bool usesOldWorldLayout = GameObject.Find("Margem esquerda") != null ||
+                                  GameObject.Find("Degrau da margem 1") != null ||
+                                  GameObject.Find("Saída submersa invisível") == null;
 
-        if (Object.FindAnyObjectByType<ExplorerController>() == null || usesOldItemLayout)
+        if (Object.FindAnyObjectByType<ExplorerController>() == null || usesOldItemLayout || usesOldWorldLayout)
             BuildAndSaveScene();
         else if (active.isDirty)
             EditorSceneManager.SaveScene(active, ScenePath);
