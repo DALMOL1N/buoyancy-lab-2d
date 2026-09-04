@@ -68,11 +68,13 @@ public sealed class RuntimeGameBootstrap : MonoBehaviour
         GameProgress progress = gameObject.AddComponent<GameProgress>();
         progress.Configure(hud, 3);
         CreatePlayer(explorerFrames);
-        CreateProp("Baú Pesado", new Vector2(-3.1f, 1.15f), new Vector2(1.45f, 1.25f), propSprites[0], 5.2f, 2.35f, 0.85f, hud, progress,
+        // Os três objetos começam bem acima do lago e caem na água assim que
+        // a fase inicia. Depois o jogador mergulha para recuperá-los.
+        CreateProp("Baú Pesado", new Vector2(-0.8f, 5.1f), new Vector2(1.45f, 1.25f), propSprites[0], 5.2f, 2.35f, 0.85f, hud, progress,
             "BAÚ", "densidade 2,35 • afunda", new Color(0.82f, 0.43f, 0.12f));
-        CreateProp("Barril Equilibrado", new Vector2(-4.8f, 1.1f), new Vector2(1.15f, 1.35f), propSprites[1], 2.2f, 0.92f, 0.72f, hud, progress,
+        CreateProp("Barril Equilibrado", new Vector2(3.8f, 5.7f), new Vector2(1.15f, 1.35f), propSprites[1], 2.2f, 0.92f, 0.72f, hud, progress,
             "BARRIL", "densidade 0,92 • quase neutro", new Color(0.2f, 0.68f, 0.74f));
-        CreateProp("Garrafa Leve", new Vector2(-7.0f, 0.9f), new Vector2(0.65f, 1.05f), propSprites[2], 0.45f, 0.22f, 0.42f, hud, progress,
+        CreateProp("Garrafa Leve", new Vector2(8.1f, 5.0f), new Vector2(0.65f, 1.05f), propSprites[2], 0.45f, 0.22f, 0.42f, hud, progress,
             "GARRAFA", "densidade 0,22 • boia", new Color(0.22f, 0.88f, 1f));
 
         CreateFireflies();

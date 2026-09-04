@@ -64,7 +64,13 @@ public static class BuoyancySceneBuilder
 
         // Uma cena antiga continha apenas o bootstrap. Reconstrói e salva todos
         // os objetos para que apareçam na Scene/Hierarchy sem apertar Play.
-        if (Object.FindAnyObjectByType<ExplorerController>() == null)
+        GameObject barrel = GameObject.Find("Barril Equilibrado");
+        GameObject bottle = GameObject.Find("Garrafa Leve");
+        bool usesOldItemLayout = barrel == null || bottle == null ||
+                                 barrel.transform.position.y < 4f ||
+                                 bottle.transform.position.y < 4f;
+
+        if (Object.FindAnyObjectByType<ExplorerController>() == null || usesOldItemLayout)
             BuildAndSaveScene();
         else if (active.isDirty)
             EditorSceneManager.SaveScene(active, ScenePath);
